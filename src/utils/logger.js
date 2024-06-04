@@ -4,12 +4,12 @@ import appConfig from '../config.js';
 
 const customLevelOptions = {
     levels: {
-        debug: 0,
-        http: 1,
-        info: 2,
-        warning: 3,
-        error: 4,
-        fatal: 5,
+        debug: 5,
+        http: 4,
+        info: 3,
+        warning: 2,
+        error: 1,
+        fatal: 0,
     },
     colors: {
         debug: "cyan",
@@ -17,7 +17,7 @@ const customLevelOptions = {
         info: "blue",
         warning: "yellow",
         error: "red",
-        fatal: "cyan",
+        fatal: "magenta",
     },
 };
 
@@ -46,7 +46,7 @@ const prodLogger = winston.createLogger({
     format: customFormat,
     transports: [
         new winston.transports.File({ filename: './logs/production.log', level: 'info'}),
-        new winston.transports.File({ filename: './logs/errors.log', level: 'fatal'})
+        new winston.transports.File({ filename: './logs/errors.log', level: 'error'})
     ]
 });
 

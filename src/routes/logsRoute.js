@@ -19,7 +19,7 @@ logsRoute.get('/', (req, res) => {
     req.logger.error('Este es un mensaje de error');
 
     // Logger de nivel fatal
-    req.logger.fatal('Este es un mensaje fatal');
+   // req.logger.fatal('Este es un mensaje fatal');
 
     res.send('Logs probados con éxito');
 });
