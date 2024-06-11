@@ -1,21 +1,13 @@
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+
 import bcrypt from 'bcrypt'
 import nodemailer from "nodemailer";
 import config from '../config.js';
 import ticketModel from '../dao/models/tickets.js';
 import { faker } from '@faker-js/faker';
+
 import ProductDTO from '../dao/DTOs/products.dto.js';
 
-// Obtiene la ruta del archivo actual
-const __filename = fileURLToPath(import.meta.url);
-// Obtiene el directorio del archivo actual
-const __dirname = dirname(__filename)
 
-/**
- * Exporta la ruta del directorio del archivo actual.
- */
-export default __dirname
 
 /**
  * Crea un hash a partir de una contraseña utilizando bcrypt.
@@ -31,9 +23,6 @@ export const createHash = (password) => bcrypt.hashSync(password, bcrypt.genSalt
  * @returns {boolean} - true si la contraseña es válida, false si no lo es.
  */
 export const isValidPassword = (user, password) => {
-  console.log(
-    `Datos a validar: user-password: ${user.password}, password: ${password}`
-  );
   return bcrypt.compareSync(password, user.password);
 };
 
@@ -160,9 +149,10 @@ const createProduct = () => {
       stock: parseInt(faker.string.numeric({length: 3})),
       status: faker.datatype.boolean(),
       category: faker.commerce.department(),
-      thumbnails: [faker.image.url()]
+      thumbnails: [faker.image.url()],
+      owner : "admin"
   };
-
+console.log("entro")
   const product = new ProductDTO(productData)
   
   // Verificar si algún campo obligatorio está vacío

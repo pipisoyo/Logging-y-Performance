@@ -52,8 +52,14 @@ viewRoutes.get('/', auth, viewsController.renderProfile);
  * @name GET /restore
  * @function
  */
-viewRoutes.get('/restore', viewsController.renderRestore);
+viewRoutes.get('/restore/:token', viewsController.renderRestore);
 
+/**
+ * Ruta para renderizar la vista de restablecimiento de contraseña.
+ * @name GET /restore
+ * @function
+ */
+viewRoutes.get('/mailRestore', viewsController.renderMailRestore);
 /**
  * Ruta para renderizar la vista de generación del ticket.
  * @name GET /ticket/:tcode

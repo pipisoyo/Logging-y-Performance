@@ -2,7 +2,8 @@
  * Módulo para la gestión de variables de entorno.
  */
 import dotenv from "dotenv";
-
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 /**
  * Carga las variables de entorno desde el archivo .env.
  */
@@ -30,6 +31,10 @@ const appConfig = {
     mode : process.env.MODE
 };
 
-    
+
 
 export default appConfig;
+
+const __filename = fileURLToPath(import.meta.url);
+export const __dirname = dirname(__filename)
+

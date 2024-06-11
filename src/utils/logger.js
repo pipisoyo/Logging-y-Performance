@@ -7,7 +7,7 @@ const customLevelOptions = {
         debug: 5,
         http: 4,
         info: 3,
-        warning: 2,
+        warn: 2,
         error: 1,
         fatal: 0,
     },
@@ -15,12 +15,13 @@ const customLevelOptions = {
         debug: "cyan",
         http: "green",
         info: "blue",
-        warning: "yellow",
+        warn: "yellow",
         error: "red",
         fatal: "magenta",
     },
 };
 
+winston.addColors(customLevelOptions.colors); 
 const customFormat = format.combine(
     format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
     format.printf(({ level, message, timestamp }) => {

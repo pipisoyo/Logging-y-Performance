@@ -40,15 +40,17 @@ export const authUser = (role) => {
      * @param {object} req - Objeto de solicitud.
      * @param {object} res - Objeto de respuesta.
      * @param {function} next - Función para pasar al siguiente middleware.
-     */
-    return (req, res, next) => {
-        if (!req.session.user) {
-            return res.status(401).json({ status: "error", message: "Usuario no autenticado" })
-        }
+    */
+   return (req, res, next) => {
+       if (!req.session.user) {
+           return res.status(401).json({ status: "error", message: "Usuario no autenticado" })
+           }
 
-        const userRole = req.session.user.role;
-
-        if (!role.includes(userRole)) {
+           const userRole = req.session.user.role;
+           console.log("🚀 ~ return ~ userRole:", userRole)
+           
+           if (!role.includes(userRole)) {
+            console.log("🚀 ~ return ~ role.includes(userRole):", role.includes(userRole));
             return res.status(403).json({ status: "error", message: "Acceso denegado" });
         }
 

@@ -70,7 +70,13 @@ const productController = {
      * @param {object} res - Objeto de respuesta.
      */
     addProduct: (req, res) => {
-        addLogger(req, res, () => {
+        addLogger(req, res, async () => {
+            let userRole = req.session.user.role;
+            console.log("🚀 ~ addLogger ~ userRole:", userRole)
+            let owner = "admin"
+            if ( userRole == "premiun") {
+                owner=req.session.user.email
+                }
             let product = Object.keys(req.body)
             let productKeys = ["title", "description", "price", "code", "stock", "status", "category", "thumbnails"]
             let invalidKeys = productKeys.filter(key => !product.includes(key)).map(key => ({
@@ -78,7 +84,7 @@ const productController = {
                 index: productKeys.indexOf(key),
                 value: product[productKeys.indexOf(key)] || 'No ingresado'
             }));
-            let { title, description, price, code, stock, status, category, thumbnails } = req.body;
+            let { title, description, price, code, stock, status, category, thumbnails} = req.body;
 
             if (invalidKeys.length > 0) {
                 throw CustomError.CustomError(
@@ -89,7 +95,7 @@ const productController = {
                 )
             }
 
-            Promise.resolve(productsService.addProduct({ title, description, price, code, stock, status, category, thumbnails }))
+            Promise.resolve(productsService.addProduct({ title, description, price, code, stock, status, category, thumbnails, owner }))
                 .then(result => {
                     if (!result) {
                         req.logger.error('Error al agregar el producto');
@@ -174,23 +180,37 @@ const productController = {
     deleteProduct: (req, res) => {
         addLogger(req, res, async () => {
             req.logger.info('Eliminando un producto');
-
+            let userEmail = req.session.user.email;
+            let userRole = req.session.user.role;
+            console.log("🚀 ~ addLogger ~ userEmail:", userEmail)
             try {
                 const id = req.params._id;
+                let product = await productsService.getById(id);
+
+                if (!product){
+                    req.logger.warn('Producto no encontrado');
+                    return res.status(404).send({ error: "Producto no encontrado" });
+                }
+                
+                if (product.owner !== userEmail && userRole!== 'admin') {
+                    req.logger.warn('No puede borrar productos que usted no creó');
+                    return res.status(403).send({ error: "No tiene permiso para eliminar este producto" });
+                }
+    
                 const result = await productsService.deleteProduct(id);
                 const data = await productsService.getAll();
-
+    
                 if (result) {
                     req.logger.info('Producto eliminado con éxito');
-                    res.status(201).send({ status: "success", payload: result });
                     io.emit('products', data.result);
+                    return res.status(201).send({ status: "success", payload: result });
                 } else {
                     req.logger.warn('Producto no encontrado');
-                    res.status(404).send({ error: "Product not found" });
+                    return res.status(404).send({ error: "Producto no encontrado" });
                 }
             } catch (error) {
                 req.logger.error('Error al eliminar el producto: ' + error.message);
-                res.status(500).send({ error: "An error occurred while deleting the product" });
+                return res.status(500).send({ error: "Ocurrió un error al eliminar el producto" });
             }
         });
     },

@@ -9,21 +9,19 @@ form.addEventListener("submit", (e) => {
   const data = new FormData(form);
   const obj = {};
   data.forEach((value, key) => (obj[key] = value));
-  const token = document.getElementById('restoreForm').getAttribute('data-token');
-  fetch(`/api/sessions/restore/${token}`, {
+  
+  fetch("/api/sessions/mailRestore", {
     method: "POST",
-    body: JSON.stringify({ token: token, obj }),
+    body: JSON.stringify(obj),
     headers: {
       "Content-Type": "application/json",
     },
   }).then((response) => {
     if (response.status === 200) {
-      alert("Contraseña restablecida con éxito");
+      alert("Email enviado, revise su correo");
       window.location.replace("/login");
     } else {
-        response.json().then((data) => {
-            alert(JSON.stringify(data.message));
-        });
+      alert("Algo salió mal");
     }
   });
 });

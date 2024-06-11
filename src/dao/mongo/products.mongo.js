@@ -64,7 +64,7 @@ class Products {
      * @param {Array<object>} products - Lista de productos a agregar.
      * @returns {Promise<Array>} - Lista de productos creados.
      */
-    async addProducts (products) {
+    async insertDocument (products) {
         console.log("🚀 ~ Products ~ addProducts ~ products:", products)
         try {
             let result = await productsModel.insertMany(products);

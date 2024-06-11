@@ -17,10 +17,14 @@ export default class ProductDTO {
      * @param {boolean} params.status - El estado del producto (activo/inactivo).
      * @param {string} params.category - La categoría a la que pertenece el producto.
      * @param {Array} params.thumbnails - Las miniaturas del producto.
-     */
-    constructor({ title, description, price, code, stock, status, category, thumbnails }) {
+    
+     */ 
+    // @param {string} params.owner - tipo de usuario
+    constructor({ title, description, price, code, stock, status, category, thumbnails, owner  }) {
         // Validación de datos
-        if (typeof title !== 'string' || typeof description !== 'string' || typeof price !== 'number' || typeof code !== 'string' || typeof stock !== 'number' || typeof status !== 'boolean' || typeof category !== 'string'){
+        if (typeof title !== 'string' || typeof description !== 'string' || typeof price !== 'number' || 
+            typeof code !== 'string' || typeof stock !== 'number' || typeof status !== 'boolean' || 
+            typeof category !== 'string' || typeof owner !== 'string' ){
             throw new Error('Los datos proporcionados no son válidos');
         }
 
@@ -33,7 +37,7 @@ export default class ProductDTO {
         this.status = status || true;
         this.category = category || '';
         this.thumbnails = thumbnails || [];
-        
+        this.owner = owner || 'admin';
         // Inmutabilidad
         Object.freeze(this);
     }

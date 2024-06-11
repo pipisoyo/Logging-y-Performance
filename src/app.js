@@ -3,7 +3,7 @@
  */
 import express from "express";
 import handlebars from 'express-handlebars'
-import __dirname from "./utils/utils.js";
+import {__dirname} from "./config.js";
 import initilizePassport from "./config/passport.config.js";
 import appMiddlewares from './config/appMiddlewares.js';
 import { app } from './config/server.js';

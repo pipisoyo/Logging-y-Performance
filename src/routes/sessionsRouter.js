@@ -58,7 +58,14 @@ sessionsRouter.get("/githubcallback", passport.authenticate("github", { failureR
  * @name POST /restore
  * @function
  */
-sessionsRouter.post("/restore", sessionController.restorePassword);
+sessionsRouter.post("/restore/:token", sessionController.restorePassword);
+
+/**
+ * Ruta para restablecer la contraseña.
+ * @name POST /restore
+ * @function
+ */
+sessionsRouter.post("/mailRestore", sessionController.mailRestore);
 
 /**
  * Ruta para obtener el usuario actual.
@@ -66,6 +73,13 @@ sessionsRouter.post("/restore", sessionController.restorePassword);
  * @function
  */
 sessionsRouter.get('/current', auth, sessionController.getCurrentUser);
+
+/**
+ * Ruta para obtener el usuario actual.
+ * @name GET /current
+ * @function
+ */
+sessionsRouter.put('/premiun/:uid', sessionController.premiun);
 
 /**
  * Exporta los enrutadores de las rutas Sessions.

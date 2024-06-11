@@ -3,9 +3,7 @@ import cartsModel from '../dao/models/carts.js';
 import userModel from '../dao/models/users.js';
 import response from '../config/responses.js';
 import cartControler from './cartControler.js';
-//import ProductsManager from '../dao/mongo/productManager.js';
-//import Products from "../dao/memory/products.memory.js"
-//const productsServices = new ProductsManager()
+import jwt from 'jsonwebtoken';
 import { Products } from '../dao/factory.js';
 import ticketModel from '../dao/models/tickets.js';
 import { addLogger } from '../utils/logger.js';
@@ -81,9 +79,11 @@ const viewsController = {
     renderCart: (req, res) => {
         addLogger(req, res, async () => {
             const cid = req.params.cid;
+            console.log("🚀 ~ addLogger ~ cid:", cid)
     
             try {
                 const cart = await cartsModel.findById(cid).populate('products.product').lean().exec();
+                console.log("🚀 ~ addLogger ~ cart:", cart)
                 const products = cart.products.map(element => ({
                     ...element.product,
                     quantity: element.quantity
@@ -133,8 +133,27 @@ const viewsController = {
      * @param {object} res - Objeto de respuesta.
      */
     renderRestore: (req, res) => {
-        res.render('restore');
+        addLogger(req, res, async () => {
+            const token = req.params.token; // Obtener el token correctamente
+            jwt.verify(token, 'secretKey', (err, decoded) => {
+                if (err) {
+                    // Mostrar una alerta antes de redirigir a la vista de login
+                    res.send('<script>alert("El enlace ha caducado o es inválido. Solicita un nuevo enlace de recuperación."); window.location.href = "/login";</script>');
+                } else {
+                    res.render('restore',{token}); // Renderizar la vista "restore" si el token es válido
+                }
+            });
+        });
     },
+
+        /**
+     * Renderiza la vista para restaurar contraseña.
+     * @param {object} req - Objeto de solicitud.
+     * @param {object} res - Objeto de respuesta.
+     */
+        renderMailRestore: (req, res) => {
+            res.render('mailRestore');
+        },
 
         /**
      * Renderiza la vista de productos con paginación.

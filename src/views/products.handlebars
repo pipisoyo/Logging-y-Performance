@@ -85,11 +85,9 @@
       })
         .then(response => response.json())
         .then(data => {
-          console.log('Success:', data);
-          alert('Producto agregado');
+          alert(data.message);
         })
         .catch((error) => {
-          console.error('Error:', error);
           alert('Error al agregar el producto');
         });
     }

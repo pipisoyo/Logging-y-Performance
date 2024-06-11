@@ -38,6 +38,11 @@ const schema = new mongoose.Schema({
     thumbnails: {
         type: [String],
         required: true
+    },
+    owner : {
+        type: String,
+        ref: "users",
+        required: true
     }
 });
 
